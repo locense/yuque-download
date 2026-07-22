@@ -1,0 +1,30 @@
+# --- OS files ---
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+
+# --- IDE / Editor ---
+.vscode/
+.idea/
+*.suo
+*.sublime-project
+*.sublime-workspace
+
+# --- Browser extension build artifacts ---
+*.crx
+*.nex
+*.pem
+*.zip
+*.xpi
+
+# --- Dependencies ---
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# --- Environment ---
+.env
+.env.local

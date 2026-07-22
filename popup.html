@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div id="app">
+    <h2>语雀下载器设置</h2>
+
+    <label class="row">
+      <input type="checkbox" id="ignoreImages">
+      <span>忽略图片（不下载图片）</span>
+    </label>
+
+    <label class="row">
+      <input type="checkbox" id="ignoreAttachments">
+      <span>忽略附件（不下载文件附件）</span>
+    </label>
+
+    <label class="row">
+      <input type="checkbox" id="includeToc">
+      <span>文章内生成目录 (TOC)</span>
+    </label>
+
+    <label class="row">
+      <input type="checkbox" id="hideFooter">
+      <span>隐藏页脚（更新时间、原文链接）</span>
+    </label>
+
+    <label class="row">
+      <input type="checkbox" id="convertVideoLinks">
+      <span>转换视频链接为 &lt;video&gt; 标签</span>
+    </label>
+
+    <div class="info">
+      <p>使用说明：打开任意语雀知识库页面，右下角会出现下载按钮。</p>
+      <p>本扩展使用您当前的登录状态，无需额外填写 Token。</p>
+    </div>
+
+    <button id="saveBtn">保存设置</button>
+    <span id="saveMsg" class="saved">已保存</span>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

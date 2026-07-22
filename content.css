@@ -1,0 +1,109 @@
+/* Floating download button */
+#yuque-dl-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2147483647;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: #2b6ef0;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(43, 110, 240, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 0;
+  line-height: 1;
+}
+#yuque-dl-fab:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(43, 110, 240, 0.55);
+}
+#yuque-dl-fab:active {
+  transform: scale(0.95);
+}
+#yuque-dl-fab.yuque-dl-loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+/* Download progress overlay */
+#yuque-dl-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+  background: rgba(0, 0, 0, 0.45);
+  align-items: center;
+  justify-content: center;
+}
+#yuque-dl-overlay.active {
+  display: flex;
+}
+#yuque-dl-panel {
+  background: white;
+  border-radius: 12px;
+  padding: 24px 28px;
+  min-width: 400px;
+  max-width: 520px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #1f1f1f;
+}
+#yuque-dl-panel h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#yuque-dl-panel .yuque-dl-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0;
+  font-size: 14px;
+}
+#yuque-dl-panel .yuque-dl-progress-bar-bg {
+  flex: 1;
+  height: 8px;
+  background: #e8e8e8;
+  border-radius: 4px;
+  overflow: hidden;
+}
+#yuque-dl-panel .yuque-dl-progress-bar-fill {
+  height: 100%;
+  background: #2b6ef0;
+  border-radius: 4px;
+  transition: width 0.3s;
+  width: 0%;
+}
+#yuque-dl-panel .yuque-dl-progress-label {
+  min-width: 48px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: #666;
+}
+#yuque-dl-panel .yuque-dl-status-text {
+  margin-top: 12px;
+  font-size: 13px;
+  color: #888;
+}
+#yuque-dl-panel .yuque-dl-close-btn {
+  margin-top: 16px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 6px;
+  background: #f0f0f0;
+  color: #333;
+  cursor: pointer;
+  font-size: 13px;
+}
+#yuque-dl-panel .yuque-dl-close-btn:hover {
+  background: #e0e0e0;
+}
