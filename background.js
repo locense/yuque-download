@@ -78,17 +78,28 @@ async function downloadKB(info, prefs, sendStatus) {
     md = fixCode(md);
 
     if (!prefs.ignoreImages) {
+      // 根据文章所在目录层级，计算相对于 Markdown 文件的图片路径
+      // 图片在 ZIP 内统一放在根目录的 img/ 下（不含 ../）
       const imgDir = 'img/' + item.uuid;
+      // 但在 Markdown 引用中要根据文章深度加 ../ 前缀（文本内容，不是 ZIP 路径）
+      const depth = resolvePath(item).length;
+      const mdImgPrefix = depth > 0 ? '../'.repeat(depth) : '';
+      const mdImgDir = mdImgPrefix + 'img/' + item.uuid;
       const urls = [...md.matchAll(/!\[([^\]]*)\]\(([^)]+)\)/g)].map(m => m[2]).filter(u => u.startsWith('http'));
       for (const url of urls) {
         try {
-          const sig = await signUrl(url);
-          const r = await fetch(sig, { credentials: 'include' });
+          // 1) Try direct CDN fetch (no auth needed, works offline later)
+          let r = await fetch(url, { referrer: 'https://www.yuque.com/' });
+          // 2) Fallback: signed proxy (needs cookies, might not work in SW)
+          if (!r.ok) {
+            const sig = await signUrl(url);
+            r = await fetch(sig, { credentials: 'include' });
+          }
           if (r.ok) {
             const blob = await r.blob();
             const name = url.split('/').pop() || 'img.png';
             zip.folder(root).folder(imgDir).file(name, blob);
-            md = md.replace(url, imgDir + '/' + name);
+            md = md.replace(url, mdImgDir + '/' + name);
           }
         } catch {}
       }
@@ -96,6 +107,9 @@ async function downloadKB(info, prefs, sendStatus) {
 
     if (!prefs.ignoreAttachments) {
       const aDir = 'attachments/' + item.uuid;
+      const depth = resolvePath(item).length;
+      const mdAttachPrefix = depth > 0 ? '../'.repeat(depth) : '';
+      const mdAttachDir = mdAttachPrefix + 'attachments/' + item.uuid;
       const matches = [...md.matchAll(/\[([^\]]*)\]\((https?:\/\/[^)]*?yuque\.com\/attachments[^)]*)\)/g)];
       for (const [, label, url] of matches) {
         try {
@@ -104,7 +118,7 @@ async function downloadKB(info, prefs, sendStatus) {
             const blob = await r.blob();
             const name = url.split('/').pop() || label;
             zip.folder(root).folder(aDir).file(name, blob);
-            md = md.replace('[' + label + '](' + url + ')', '[附件: ' + name + '](' + aDir + '/' + name + ')');
+            md = md.replace('[' + label + '](' + url + ')', '[附件: ' + name + '](' + mdAttachDir + '/' + name + ')');
           }
         } catch {}
       }

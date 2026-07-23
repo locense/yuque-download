@@ -12,9 +12,11 @@
     "downloads",
     "storage"
   ],
-  "host_permissions": [
-    "https://www.yuque.com/*"
-  ],
+ "host_permissions": [
+    "https://www.yuque.com/*",
+    "https://*.nlark.com/*",
+    "https://*.yuque.com/*"
+ ],
   "action": {
     "default_popup": "popup/popup.html",
     "default_title": "语雀下载器",
