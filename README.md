@@ -40,14 +40,14 @@
 
 ```
 ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
-│  Content Script  │────▶│  Content Script (检测页面) │────▶│  Floating Button  │
-│  (content.js)    │     │  Parses TOC & data │     │  (Inject UI)      │
+│  Content Script  │────▶│  Content Script  │────▶│  Floating Button  │
+│  (content.js)    │     │  Parses TOC & data  │     │  (Inject UI)      │
 └──────────────┘     └──────────────┘     └──────────────┘
                                                     │
                                                     ▼
 ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
 │  Service Worker │◀───│  Port (长连接)  │◀───│  User clicks   │
-│  (background.js)│     │  keeps SW alive │     │  Download btn  │
+│  (background.js)│     │  keeps SW alive  │     │  Download btn  │
 │  + JSZip        │     └──────────────┘     └──────────────┘
 │  + 3 Workers    │
 └───────┬───────┘
@@ -57,15 +57,15 @@
 │  For each article in TOC:                   │
 │    1. Fetch Markdown via Yuque API          │
 │    2. Fetch metadata via Yuque API          │
-│    3. Download images → `img/<uuid>/`       │
-│    4. Download attachments → `attachments/<uuid>/` │
+│    3. Download images → img/<uuid>/         │
+│    4. Download attachments → attachments/<uuid>/     │
 │    5. Fix LaTeX, code blocks, image URLs    │
-│    6. Write to root-based directory tree    │
+│    6. Write to directory tree                  │
 └─────────────────────────────────────────────┘
         │
         ▼
 ┌──────────────────────┐
-│  Generate `index.md`   │
+│  Generate index.md     │
 │  Pack ZIP via JSZip   │
 │  Trigger browser DL   │
 └──────────────────────┘
@@ -73,8 +73,8 @@
 
 ### 技术要点 / Technical Highlights
 
-- **Content Script** (`content.js`): 解析语雀页面嵌入的 JSON 数据，提取知识库 TOC 和信息
-- **Service Worker** (`background.js`): 通过长连接 Port 保持活跃，串联抓取、打包、下载流程
+- **Content Script** (content.js): 解析语雀页面嵌入的 JSON 数据，提取知识库 TOC 和信息
+- **Service Worker** (background.js): 通过长连接 Port 保持活跃，串联抓取、打包、下载流程
 - **并发控制** (Concurrency): 使用 3 个异步 Worker 并行处理文章，提升下载效率
 - **ZIP 生成**: 使用 JSZip 库在浏览器端完成打包，无需服务端参与
 - **图片签名**: 通过 SHA-256 签名绕过语雀图片防盗链
@@ -83,17 +83,13 @@
 
 ## 安装方法 / Installation
 
-### 在线安装 / From Chrome Web Store
-
-> 暂未上架 Chrome Web Store
-
 ### 开发者模式安装 / Developer Mode
 
 1. 下载本仓库的最新 Release，或克隆代码：
    ```bash
    git clone https://github.com/locense/yuque-download.git
    ```
-2. 打开 Chrome，进入 `chrome://extensions`
+2. 打开 Chrome，进入 chrome://extensions
 3. 打开右上角的 **开发者模式**
 4. 点击 **加载已解压的扩展程序**
 5. 选择本项目的根目录
@@ -102,8 +98,8 @@
 
 ## 使用方法 / Usage
 
-1. 打开任意语雀知识库页面（如 `https://www.yuque.com/xxx/yyy`）
-2. 页面右下角会出现一个 **⬇** 下载按钮
+1. 打开任意语雀知识库页面（如 https://www.yuque.com/xxx/yyy）
+2. 页面右下角会出现一个 ⬇ 下载按钮
 3. 点击按钮，弹出进度面板
 4. 等待下载完成，浏览器会自动下载 ZIP 文件
 5. 解压后即可获得本地 Markdown 文件
@@ -139,6 +135,24 @@ yuque-download/
     ├── popup.css
     └── popup.js
 ```
+
+---
+
+## 更新日志 / Changelog
+
+### v1.1.0 (2026-07-23)
+
+- 🐛 **修复图片下载路径问题** — 修正多层目录文章的图片相对路径，现在图片在 Markdown 中能正确显示
+- 🚀 **改进图片下载策略** — 优先从 CDN 直接下载（无需认证），失败后再走签名代理，下载更可靠
+- 🔗 **修复附件路径** — 附件的 Markdown 引用路径也使用正确的相对路径
+- 🌐 **扩展域名权限** — 增加 *.nlark.com 和 *.yuque.com CDN 域名访问权限
+- ✨ 增加 CDN 直连下载 fallback，提升下载成功率
+
+### v1.0.0 (2026-07-22)
+
+- 初始版本发布：一键将语雀知识库下载为本地 Markdown 文件
+
+---
 
 ## 许可证 / License
 
